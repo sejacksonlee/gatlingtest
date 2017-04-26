@@ -31,19 +31,19 @@ class BettingSimulation extends Simulation {
 
 	//Put test setups into the following singletons
 	object Visit {
-		val visit = .exec(http("Go to betting page")
+		val visit = exec(http("Go to betting page")
 			.post("/slp/en-gb")
 			.headers(headers_0)
 			.formParam("action", "GoRemoveLeg")
 			.formParam("bet_no", "0")
 			.formParam("blockbuster_id", "-1")
 			.formParam("switch_tab", "1")
-			.formParam("csrf_token", "122616cc02f4a081f35d")
+			.formParam("csrf_token", "122616cc02f4a081f35d"))
 			.pause(4)
 	}
 
 	object AddTeam {
-		val addTeam = .exec(http("Add team")
+		val addTeam = exec(http("Add team")
 			.post("/slp/en-gb")
 			.headers(headers_0)
 			.formParam("action", "GoAddLeg")
@@ -70,12 +70,13 @@ class BettingSimulation extends Simulation {
 	}
 
 	object PlaceBet {
-		val placeBet = .exec(http("Place Bet")
+		val placeBet = exec(http("Place Bet")
 			.get(uri2 + "/s23402688113242?AQB=1&ndh=1&pf=1&t=26%2F3%2F2017%2021%3A40%3A33%203%20-60&mid=02402740728773446981827477181421495053&aamlh=6&ce=UTF-8&ns=williamhill&pageName=sports%3Abetting%3Aen-gb&g=http%3A%2F%2Fsports.williamhill.com%2Fbetting%2Fen-gb&pe=lnk_o&pev2=betslip%3A%20submit%20betslip&events=scCheckout&products=%3B1542636701%3B%3B%3B%3BeVar38%3Dsingle%20%3A%3A%20s-only&v106=1&s=1280x800&c=24&j=1.6&v=N&k=Y&bw=1280&bh=569&AQE=1")
 			.resources(http("Must be logged in - oops")
 				.get(uri2 + "/s25270891875539?AQB=1&ndh=1&pf=1&t=26%2F3%2F2017%2021%3A40%3A33%203%20-60&mid=02402740728773446981827477181421495053&aamlh=6&ce=UTF-8&ns=williamhill&pageName=sports%3Abetting%3Aen-gb&g=http%3A%2F%2Fsports.williamhill.com%2Fbetting%2Fen-gb&pe=lnk_o&pev2=SLIP_API_ERR_USER_NOT_LOGGED_IN&events=event10&c75=SLIP_API_ERR_USER_NOT_LOGGED_IN&v103=SLIP_API_ERR_USER_NOT_LOGGED_IN&v106=1&s=1280x800&c=24&j=1.6&v=N&k=Y&bw=1280&bh=569&AQE=1")))
-
 	}
+
+  val users = scenario("Users").exec(Visit.visit, AddTeam.addTeam, PlaceBet.placeBet)
 
 	//Scenario runs through the possible scenarios
 	val scn = scenario("BettingSimulation")
